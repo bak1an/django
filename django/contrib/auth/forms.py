@@ -27,6 +27,12 @@ class ReadOnlyPasswordHashWidget(forms.Widget):
         encoded = value
         final_attrs = self.build_attrs(attrs)
 
+        input_attrs = {
+            "name": name,
+            "type": "hidden",
+            "value": value
+        }
+
         if encoded == '' or encoded == UNUSABLE_PASSWORD:
             summary = mark_safe("<strong>%s</strong>" % ugettext("No password set."))
         else:
@@ -42,7 +48,7 @@ class ReadOnlyPasswordHashWidget(forms.Widget):
                                             for key, value in hasher.safe_summary(encoded).items())
                                            )
 
-        return format_html("<div{0}>{1}</div>", flatatt(final_attrs), summary)
+        return format_html("<div{0}>{1}</div><input {2}/>", flatatt(final_attrs), summary, flatatt(input_attrs))
 
 
 class ReadOnlyPasswordHashField(forms.Field):
